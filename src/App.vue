@@ -76,8 +76,21 @@ button:active {
   border-radius: 12px;
 }
 .active {
-  transform: translateX(-150px);
+  /* transform: translateX(-150px); */
   background-color: #e76f0e;
-  border-radius: 100px;
+  /* border-radius: 100px; */
+  animation: slide-fade 0.3s ease-out forwards;
+}
+/* name of animation is up to you */
+@keyframes slide-fade {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  70% {
+    transform: translateX(-120px) scale(1.3);
+  }
+  100% {
+    transform: translateX(-150px) scale(1);
+  }
 }
 </style>
