@@ -13,6 +13,12 @@
     </transition>
     <button @click="toggleText">Move text!</button>
   </div>
+  <div class="container">
+    <transition name="button" mode="out-in">
+      <button @click="showUsers" v-if="!usersAreVisible">Show Users</button>
+      <button @click="hideUsers" v-else>Hide Users</button>
+    </transition>
+  </div>
   <!-- <base-modal @close="hideDialog" v-if="dialogIsVisible"> -->
   <base-modal @close="hideDialog" :open="dialogIsVisible">
     <p>This is a test dialog!</p>
@@ -26,7 +32,12 @@
 <script>
 export default {
   data() {
-    return { dialogIsVisible: false, animatedBlock: false, visibleText: false };
+    return {
+      dialogIsVisible: false,
+      animatedBlock: false,
+      visibleText: false,
+      usersAreVisible: false
+    };
   },
   methods: {
     showDialog() {
@@ -40,6 +51,12 @@ export default {
     },
     toggleText() {
       this.visibleText = !this.visibleText;
+    },
+    showUsers() {
+      this.usersAreVisible = true;
+    },
+    hideUsers() {
+      this.usersAreVisible = false;
     }
   }
 };
@@ -104,6 +121,24 @@ button:active {
   100% {
     transform: translateX(-150px) scale(1);
   }
+}
+
+.button-enter-from,
+.button-leave-to {
+  opacity: 0;
+}
+
+.button-enter-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.button-leave-active {
+  transition: opacity 0.3s ease-in;
+}
+
+.button-enter-to,
+.button-leave-from {
+  opacity: 1;
 }
 
 .para-enter-from {
