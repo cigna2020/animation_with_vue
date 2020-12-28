@@ -9,9 +9,14 @@
     <transition
       name="para"
       @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @before-leave="beforeLeave"
+      @leave="leave"
       @after-leave="afterLeave"
+      @enter-cancelled="enterCancelled"
+      @leave-cancelled="leaveCancelled"
     >
-      <!-- @enter; @after-enter; @before-leave; @leave -->
       <p v-if="visibleText">
         This text shoud move, more text, more...
       </p>
@@ -41,7 +46,9 @@ export default {
       dialogIsVisible: false,
       animatedBlock: false,
       visibleText: false,
-      usersAreVisible: false
+      usersAreVisible: false,
+      enterInterval: null,
+      leaveInterval: null
     };
   },
   methods: {
@@ -65,11 +72,43 @@ export default {
     },
     beforeEnter(el) {
       console.log('before enter');
-      console.log(el);
+      //   console.log(el);
+      el.style.opacity = 0;
+    },
+    enter(el, done) {
+      let round = 1;
+      this.enterInterval = setInterval(() => {
+        el.style.opacity = round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(this.enterInterval);
+          done(); // to controle after-enter
+        }
+      }, 20);
+    },
+    beforeLeave(el) {
+      el.style.opacity = 1;
+    },
+    leave(el, done) {
+      let round = 1;
+      this.leaveInterval = setInterval(() => {
+        el.style.opacity = 1 - round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(this.leaveInterval);
+          done(); // without 'done' after-leave starts immediately
+        }
+      }, 20);
     },
     afterLeave(el) {
       console.log('after Leave');
       console.log(el);
+    },
+    enterCancelled() {
+      clearInterval(this.enterInterval);
+    },
+    leaveCancelled() {
+      clearInterval(this.leaveInterval);
     }
   }
 };
@@ -152,34 +191,5 @@ button:active {
 .button-enter-to,
 .button-leave-from {
   opacity: 1;
-}
-
-.para-enter-from {
-  /* transform: translateY(50px);
-  opacity: 0;
-  scale: 0.7; */
-}
-.para-enter-active {
-  /* transition: 0.5s all ease-out; */
-  animation: slide-fade 0.5s ease-out;
-}
-.para-enter-to {
-  /* transform: translateY(0);
-  opacity: 1;
-  scale: 1; */
-}
-.para-leave-from {
-  /* transform: translateY(0);
-  opacity: 1;
-  scale: 1; */
-}
-.para-leave-active {
-  /* transition: 0.5s all ease-in; */
-  animation: slide-fade 0.5s ease-in;
-}
-.para-leave-to {
-  /* transform: translateY(-50px);
-  scale: 0.7;
-  opacity: 0; */
 }
 </style>
