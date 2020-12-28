@@ -6,7 +6,12 @@
     </button>
   </div>
   <div class="container">
-    <transition name="para">
+    <transition
+      name="para"
+      @before-enter="beforeEnter"
+      @after-leave="afterLeave"
+    >
+      <!-- @enter; @after-enter; @before-leave; @leave -->
       <p v-if="visibleText">
         This text shoud move, more text, more...
       </p>
@@ -57,6 +62,14 @@ export default {
     },
     hideUsers() {
       this.usersAreVisible = false;
+    },
+    beforeEnter(el) {
+      console.log('before enter');
+      console.log(el);
+    },
+    afterLeave(el) {
+      console.log('after Leave');
+      console.log(el);
     }
   }
 };
