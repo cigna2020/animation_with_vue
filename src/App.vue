@@ -6,8 +6,10 @@
     </button>
   </div>
   <div class="container">
-    <transition>
-      <p v-if="visibleText">This text shoud move, more text, more...</p>
+    <transition name="para">
+      <p v-if="visibleText">
+        This text shoud move, more text, more...
+      </p>
     </transition>
     <button @click="toggleText">Move text!</button>
   </div>
@@ -103,30 +105,32 @@ button:active {
   }
 }
 
-.v-enter-from {
-  transform: translateY(50px);
+.para-enter-from {
+  /* transform: translateY(50px);
   opacity: 0;
-  scale: 0.7;
+  scale: 0.7; */
 }
-.v-enter-active {
-  transition: 0.5s all ease-out;
+.para-enter-active {
+  /* transition: 0.5s all ease-out; */
+  animation: slide-fade 0.5s ease-out;
 }
-.v-enter-to {
-  transform: translateY(0);
+.para-enter-to {
+  /* transform: translateY(0);
   opacity: 1;
-  scale: 1;
+  scale: 1; */
 }
-.v-leave-from {
-  transform: translateY(0);
+.para-leave-from {
+  /* transform: translateY(0);
   opacity: 1;
-  scale: 1;
+  scale: 1; */
 }
-.v-leave-active {
-  transition: 0.5s all ease-in;
+.para-leave-active {
+  /* transition: 0.5s all ease-in; */
+  animation: slide-fade 0.5s ease-in;
 }
-.v-leave-to {
-  transform: translateY(-50px);
+.para-leave-to {
+  /* transform: translateY(-50px);
   scale: 0.7;
-  opacity: 0;
+  opacity: 0; */
 }
 </style>
