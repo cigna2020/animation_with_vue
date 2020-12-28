@@ -1,13 +1,17 @@
 <template>
   <div class="container">
+    <UsersList></UsersList>
+  </div>
+  <div class="container">
     <div class="block" :class="{ active: animatedBlock }"></div>
     <button @click="animateBlock">
       Animate
     </button>
   </div>
   <div class="container">
+    <!-- :css="false" doesn't require but it says Vue even doesn't try to find css -->
     <transition
-      name="para"
+      :css="false"
       @before-enter="beforeEnter"
       @enter="enter"
       @after-enter="afterEnter"
@@ -40,7 +44,11 @@
 </template>
 
 <script>
+import UsersList from './components/UsersList';
 export default {
+  components: {
+    UsersList
+  },
   data() {
     return {
       dialogIsVisible: false,
