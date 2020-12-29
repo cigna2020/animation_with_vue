@@ -1,54 +1,13 @@
 <template>
-  <div class="container">
-    <UsersList></UsersList>
-  </div>
-  <div class="container">
-    <div class="block" :class="{ active: animatedBlock }"></div>
-    <button @click="animateBlock">
-      Animate
-    </button>
-  </div>
-  <div class="container">
-    <!-- :css="false" doesn't require but it says Vue even doesn't try to find css -->
-    <transition
-      :css="false"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @after-enter="afterEnter"
-      @before-leave="beforeLeave"
-      @leave="leave"
-      @after-leave="afterLeave"
-      @enter-cancelled="enterCancelled"
-      @leave-cancelled="leaveCancelled"
-    >
-      <p v-if="visibleText">
-        This text shoud move, more text, more...
-      </p>
+  <router-view v-slot="slotProps">
+    <transition name="route" mode="out-in">
+      <component :is="slotProps.Component"></component>
     </transition>
-    <button @click="toggleText">Move text!</button>
-  </div>
-  <div class="container">
-    <transition name="button" mode="out-in">
-      <button @click="showUsers" v-if="!usersAreVisible">Show Users</button>
-      <button @click="hideUsers" v-else>Hide Users</button>
-    </transition>
-  </div>
-  <!-- <base-modal @close="hideDialog" v-if="dialogIsVisible"> -->
-  <base-modal @close="hideDialog" :open="dialogIsVisible">
-    <p>This is a test dialog!</p>
-    <button @click="hideDialog">Close it!</button>
-  </base-modal>
-  <div class="container">
-    <button @click="showDialog">Show Dialog</button>
-  </div>
+  </router-view>
 </template>
 
 <script>
-import UsersList from './components/UsersList';
 export default {
-  components: {
-    UsersList
-  },
   data() {
     return {
       dialogIsVisible: false,
@@ -58,66 +17,6 @@ export default {
       enterInterval: null,
       leaveInterval: null
     };
-  },
-  methods: {
-    showDialog() {
-      this.dialogIsVisible = true;
-    },
-    hideDialog() {
-      this.dialogIsVisible = false;
-    },
-    animateBlock() {
-      this.animatedBlock = !this.animatedBlock;
-    },
-    toggleText() {
-      this.visibleText = !this.visibleText;
-    },
-    showUsers() {
-      this.usersAreVisible = true;
-    },
-    hideUsers() {
-      this.usersAreVisible = false;
-    },
-    beforeEnter(el) {
-      console.log('before enter');
-      //   console.log(el);
-      el.style.opacity = 0;
-    },
-    enter(el, done) {
-      let round = 1;
-      this.enterInterval = setInterval(() => {
-        el.style.opacity = round * 0.01;
-        round++;
-        if (round > 100) {
-          clearInterval(this.enterInterval);
-          done(); // to controle after-enter
-        }
-      }, 20);
-    },
-    beforeLeave(el) {
-      el.style.opacity = 1;
-    },
-    leave(el, done) {
-      let round = 1;
-      this.leaveInterval = setInterval(() => {
-        el.style.opacity = 1 - round * 0.01;
-        round++;
-        if (round > 100) {
-          clearInterval(this.leaveInterval);
-          done(); // without 'done' after-leave starts immediately
-        }
-      }, 20);
-    },
-    afterLeave(el) {
-      console.log('after Leave');
-      console.log(el);
-    },
-    enterCancelled() {
-      clearInterval(this.enterInterval);
-    },
-    leaveCancelled() {
-      clearInterval(this.leaveInterval);
-    }
   }
 };
 </script>
@@ -199,5 +98,12 @@ button:active {
 .button-enter-to,
 .button-leave-from {
   opacity: 1;
+}
+
+.route-enter-active {
+  animation: slide-fade 0.4s ease-out;
+}
+.route-leave-active {
+  animation: slide-fade 0.4s ease-in;
 }
 </style>
